@@ -1,1 +1,4 @@
 .github/**
+
+# ignore build files
+build/
