@@ -20,8 +20,8 @@ ChatBot::ChatBot()
 // constructor WITH memory allocation
 ChatBot::ChatBot(std::string filename)
 {
-    std::cout << "ChatBot Constructor" << std::endl;
-    
+    std::cout << "ChatBot Constructor\n";
+
     // invalidate data handles
     _chatLogic = nullptr;
     _rootNode = nullptr;
@@ -30,23 +30,147 @@ ChatBot::ChatBot(std::string filename)
     _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
 }
 
+// destructor
 ChatBot::~ChatBot()
 {
-    std::cout << "ChatBot Destructor" << std::endl;
+    std::cout << "ChatBot Destructor\n";
 
     // deallocate heap memory
-    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
+    if (_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
         delete _image;
         _image = NULL;
     }
 }
 
-//// STUDENT CODE
-////
+// copy constructor
+ChatBot::ChatBot(const ChatBot &source)
+{
 
-////
-//// EOF STUDENT CODE
+    // log copy constructor
+    std::cout << "ChatBot Copy Constructor\n";
+
+    // set image data to source's if existent
+    if (source._image == NULL)
+    {
+        this->_image = NULL;
+    }
+    else
+    {
+        this->_image = new wxBitmap(*source._image);
+    }
+
+    // point data to source's
+    this->_currentNode = source._currentNode;
+    this->_rootNode = source._rootNode;
+    this->_chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
+}
+
+// copy assignment operator
+ChatBot &ChatBot::operator=(const ChatBot &source)
+{
+    // log copy operation
+    std::cout << "ChatBot Copy Operation\n";
+
+    // is source: return itself
+    if (this == &source)
+    {
+        return *this;
+    }
+
+    // free image memory if allocated
+    if (_image != NULL)
+    {
+        delete _image;
+    }
+
+    // set image data to source's if existent
+    if (source._image == NULL)
+    {
+        this->_image = NULL;
+    }
+    else
+    {
+        this->_image = new wxBitmap(*source._image);
+    }
+
+    // point data to source's
+    this->_currentNode = source._currentNode;
+    this->_rootNode = source._rootNode;
+    this->_chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
+
+    // return copy
+    return *this;
+}
+
+// move constructor
+ChatBot::ChatBot(ChatBot &&source)
+{
+    // log move constructor
+    std::cout << "ChatBot Move Constructor\n";
+
+    // set image data to source's if existent
+    if (source._image == NULL)
+    {
+        this->_image = NULL;
+    }
+    else
+    {
+        this->_image = new wxBitmap(*source._image);
+    }
+
+    // point data to source's
+    this->_currentNode = source._currentNode;
+    this->_rootNode = source._rootNode;
+    this->_chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
+
+    // free source's image allocated memory
+    source._image = NULL;
+}
+
+// move assignment operator
+ChatBot &ChatBot::operator=(ChatBot &&source)
+{
+    // log move operation
+    std::cout << "ChatBot Move Operator\n";
+
+    // is source: return itself
+    if (this == &source)
+    {
+        return *this;
+    }
+
+    // free image memory if allocated
+    if (this->_image != NULL)
+    {
+        delete this->_image;
+    }
+
+    // set image data to source's if existent
+    if (source._image == NULL)
+    {
+        this->_image = NULL;
+    }
+    else
+    {
+        this->_image = new wxBitmap(*source._image);
+    }
+
+    // point data to source's
+    this->_currentNode = source._currentNode;
+    this->_rootNode = source._rootNode;
+    this->_chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
+
+    // free source's image allocated memory
+    source._image = NULL;
+
+    // return moved instance
+    return *this;
+}
 
 void ChatBot::ReceiveMessageFromUser(std::string message)
 {
@@ -69,7 +193,8 @@ void ChatBot::ReceiveMessageFromUser(std::string message)
     if (levDists.size() > 0)
     {
         // sort in ascending order of Levenshtein distance (best fit is at the top)
-        std::sort(levDists.begin(), levDists.end(), [](const EdgeDist &a, const EdgeDist &b) { return a.second < b.second; });
+        std::sort(levDists.begin(), levDists.end(), [](const EdgeDist &a, const EdgeDist &b)
+                  { return a.second < b.second; });
         newNode = levDists.at(0).first->GetChildNode(); // after sorting the best edge is at first position
     }
     else
