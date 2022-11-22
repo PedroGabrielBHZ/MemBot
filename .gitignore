@@ -2,3 +2,6 @@
 
 # ignore build files
 build/
+
+# igore cache files
+.cache/
