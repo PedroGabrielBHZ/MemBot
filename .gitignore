@@ -5,3 +5,6 @@ build/
 
 # igore cache files
 .cache/
+
+# ignore vscode files
+.vscode/

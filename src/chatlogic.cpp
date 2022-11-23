@@ -90,8 +90,6 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
 
           // node-based processing
           if (type->second == "NODE") {
-            //// STUDENT CODE
-            ////
 
             // check if node with this ID exists already
             auto newNode =
@@ -106,15 +104,10 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
               // add all answers to current node
               AddAllTokensToElement("ANSWER", tokens, **newNode);
             }
-
-            ////
-            //// EOF STUDENT CODE
           }
 
           // edge-based processing
           if (type->second == "EDGE") {
-            //// STUDENT CODE
-            ////
 
             // find tokens for incoming (parent) and outgoing (child) node
             auto parentToken = std::find_if(
@@ -151,9 +144,6 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
               (*childNode)->AddEdgeToParentNode(edge.get());
               (*parentNode)->AddEdgeToChildNode(std::move(edge));
             }
-
-            ////
-            //// EOF STUDENT CODE
           }
         } else {
           std::cout << "Error: ID missing. Line is ignored!" << std::endl;

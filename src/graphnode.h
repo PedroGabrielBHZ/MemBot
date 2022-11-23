@@ -9,7 +9,8 @@
 // forward declarations
 class GraphEdge;
 
-class GraphNode {
+class GraphNode
+{
 private:
   // data handles (owned), edges to subsequent nodes.
   std::vector<std::unique_ptr<GraphEdge>> _childEdges;
